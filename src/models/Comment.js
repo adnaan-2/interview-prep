@@ -6,14 +6,6 @@ const CommentSchema = new mongoose.Schema({
     ref: 'Post',
     required: true,
   },
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
   comment: {
     type: String,
     required: true,
@@ -24,4 +16,10 @@ const CommentSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.models.Comment || mongoose.model('Comment', CommentSchema);
+// In development with Next.js, the model can be compiled with an old schema.
+// Remove any existing model so the latest schema (without name/email) is used.
+if (mongoose.models.Comment) {
+  delete mongoose.models.Comment;
+}
+
+export default mongoose.model('Comment', CommentSchema);

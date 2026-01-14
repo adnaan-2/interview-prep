@@ -16,8 +16,6 @@ export default function PostDetailPage() {
   const [loading, setLoading] = useState(true)
   const [comments, setComments] = useState([])
   const [commentForm, setCommentForm] = useState({
-    name: '',
-    email: '',
     comment: ''
   })
   const [submittingComment, setSubmittingComment] = useState(false)
@@ -274,26 +272,6 @@ export default function PostDetailPage() {
 
               {/* Comment Form */}
               <form onSubmit={handleCommentSubmit} className="mb-8">
-                <div className="grid md:grid-cols-2 gap-4 mb-4">
-                  <input
-                    type="text"
-                    name="name"
-                    value={commentForm.name}
-                    onChange={handleCommentChange}
-                    placeholder="Your Name"
-                    required
-                    className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    value={commentForm.email}
-                    onChange={handleCommentChange}
-                    placeholder="Your Email"
-                    required
-                    className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
                 <textarea
                   name="comment"
                   value={commentForm.comment}
@@ -317,7 +295,7 @@ export default function PostDetailPage() {
                 {comments.map((comment) => (
                   <div key={comment._id} className="border-b border-gray-200 pb-4">
                     <div className="flex items-center mb-2">
-                      <h4 className="font-semibold text-gray-900">{comment.name}</h4>
+                      <h4 className="font-semibold text-gray-900">Anonymous</h4>
                       <span className="text-gray-500 text-sm ml-2">
                         {formatDate(comment.createdAt)}
                       </span>

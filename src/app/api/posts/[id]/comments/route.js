@@ -27,11 +27,11 @@ export async function POST(request, { params }) {
   const { id } = params;
 
   try {
-    const { name, email, comment } = await request.json();
+    const { comment } = await request.json();
 
-    if (!name || !email || !comment) {
+    if (!comment) {
       return NextResponse.json({ 
-        error: 'Name, email, and comment are required' 
+        error: 'Comment is required' 
       }, { status: 400 });
     }
 
@@ -40,8 +40,6 @@ export async function POST(request, { params }) {
     // Create new comment
     const newComment = await Comment.create({
       postId: id,
-      name,
-      email,
       comment,
     });
 
