@@ -260,9 +260,36 @@ export default function Navbar() {
             </span>
           </Link>
           
-          <button className="p-2" onClick={toggleMobileSearch} aria-label="Search">
-            <Search size={24} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button className="p-2" onClick={toggleMobileSearch} aria-label="Search">
+              <Search size={24} />
+            </button>
+            {status === 'loading' ? (
+              <div className="w-16 h-7 bg-gray-700 animate-pulse rounded-md" />
+            ) : session ? (
+              <Link
+                href="/admin/dashboard"
+                className="px-2 py-1 text-xs font-medium text-white border border-blue-500 rounded hover:bg-blue-500 hover:border-blue-400 whitespace-nowrap"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/auth/login"
+                  className="px-2 py-1 text-xs font-medium text-white hover:text-blue-400 whitespace-nowrap"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  className="px-2 py-1 text-xs font-medium text-white border border-blue-500 rounded hover:bg-blue-500 hover:border-blue-400 whitespace-nowrap"
+                >
+                  Sign up
+                </Link>
+              </>
+            )}
+          </div>
         </div>
         
         {/* Desktop navbar - Single Line */}
@@ -553,18 +580,10 @@ export default function Navbar() {
                 )}
               </nav>
               
-              {/* Mobile Auth Buttons */}
+              {/* Mobile Auth Buttons (drawer only shows sign out when logged in) */}
               <div className="mt-6 pt-6 border-t border-gray-700">
-                {session ? (
+                {session && (
                   <div className="space-y-3">
-                    <Link
-                      href="/admin/dashboard"
-                      className="flex items-center gap-2 w-full py-3 px-4 bg-gray-800 hover:bg-gray-700 rounded-lg text-white text-base font-bold"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <User className="w-5 h-5" />
-                      Dashboard
-                    </Link>
                     <div className="px-4 py-2 text-sm text-gray-400">
                       {session.user.name}
                     </div>
@@ -578,23 +597,6 @@ export default function Navbar() {
                       <LogOut className="w-5 h-5" />
                       Sign out
                     </button>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <Link
-                      href="/auth/login"
-                      className="block w-full py-3 px-4 text-center bg-gray-800 hover:bg-gray-700 rounded-lg text-white text-base font-bold"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Sign in
-                    </Link>
-                    <Link
-                      href="/auth/signup"
-                      className="block w-full py-3 px-4 text-center border border-blue-500 hover:bg-blue-500 rounded-lg text-white text-base font-bold"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Sign up
-                    </Link>
                   </div>
                 )}
               </div>
