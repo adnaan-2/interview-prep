@@ -136,8 +136,40 @@ export default function PostDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-t-4 border-blue-500"></div>
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-4 py-8 animate-pulse">
+          <div className="mb-6 h-5 w-32 bg-gray-200 rounded" />
+          <div className="grid lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="h-72 w-full bg-gray-200" />
+                <div className="p-8 space-y-4">
+                  <div className="h-6 w-24 bg-gray-200 rounded-full" />
+                  <div className="h-8 w-3/4 bg-gray-200 rounded" />
+                  <div className="flex space-x-4 mt-4">
+                    <div className="h-4 w-24 bg-gray-200 rounded" />
+                    <div className="h-4 w-24 bg-gray-200 rounded" />
+                    <div className="h-4 w-24 bg-gray-200 rounded" />
+                  </div>
+                  <div className="space-y-2 mt-6">
+                    <div className="h-4 w-full bg-gray-200 rounded" />
+                    <div className="h-4 w-11/12 bg-gray-200 rounded" />
+                    <div className="h-4 w-10/12 bg-gray-200 rounded" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="h-6 w-40 bg-gray-200 rounded" />
+              <div className="bg-white rounded-xl shadow-sm p-4 space-y-3">
+                <div className="h-4 w-full bg-gray-200 rounded" />
+                <div className="h-4 w-5/6 bg-gray-200 rounded" />
+                <div className="h-4 w-4/6 bg-gray-200 rounded" />
+                <div className="h-4 w-3/4 bg-gray-200 rounded" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
