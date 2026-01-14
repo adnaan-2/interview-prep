@@ -26,8 +26,28 @@ export default function FeaturedPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="h-16 w-16 animate-spin rounded-full border-t-4 border-b-4 border-red-600"></div>
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center mb-6">
+            <div className="h-4 w-32 bg-gray-200 rounded mr-2" />
+          </div>
+          <h1 className="text-3xl font-bold mb-8">Featured Posts</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 animate-pulse">
+            {Array.from({ length: 10 }).map((_, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="h-48 w-full bg-gray-200" />
+                <div className="p-4 space-y-2">
+                  <div className="h-4 w-3/4 bg-gray-200 rounded" />
+                  <div className="h-4 w-full bg-gray-200 rounded" />
+                  <div className="flex justify-between items-center mt-2">
+                    <div className="h-3 w-20 bg-gray-200 rounded" />
+                    <div className="h-3 w-16 bg-gray-200 rounded" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     )
   }
