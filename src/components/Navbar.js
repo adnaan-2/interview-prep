@@ -332,7 +332,7 @@ export default function Navbar() {
           </nav>
           
           {/* Search Bar */}
-          <div className="flex-1 max-w-sm mx-6" ref={searchRef}>
+          <div className="flex-1 max-w-sm mx-6 relative" ref={searchRef}>
             <form onSubmit={handleSearch} className="w-full">
               <div className="relative">
                 <input
@@ -358,7 +358,7 @@ export default function Navbar() {
               </div>
 
               {showResults && (
-                <div className="absolute mt-1 w-full bg-gray-800 rounded-md shadow-lg border border-gray-700 z-50 max-h-96 overflow-y-auto">
+                <div className="absolute left-0 right-0 mt-1 w-full max-w-full bg-gray-800 rounded-md shadow-lg border border-gray-700 z-50 max-h-96 overflow-y-auto">
                   {isSearching ? (
                     <div className="p-3 text-center text-gray-400">
                       <div className="animate-pulse flex justify-center">
