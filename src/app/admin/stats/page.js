@@ -12,13 +12,15 @@ export default function AdminStatsPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (status === 'unauthenticated' || (session && session.user?.role !== 'admin')) {
+    if (status === 'unauthenticated') {
       router.push('/auth/login')
       return
     }
 
-    fetchStats()
-  }, [status, session, router])
+    if (status === 'authenticated') {
+      fetchStats()
+    }
+  }, [status, router])
 
   const fetchStats = async () => {
     try {

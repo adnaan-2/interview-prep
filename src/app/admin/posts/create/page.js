@@ -35,7 +35,7 @@ export default function AdminCreatePostPage() {
     )
   }
 
-  if (status === 'unauthenticated' || session?.user?.role !== 'admin') {
+  if (status === 'unauthenticated') {
     router.push('/auth/login')
     return null
   }
