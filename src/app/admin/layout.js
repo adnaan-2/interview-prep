@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export default function AdminLayout({ children }) {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
 

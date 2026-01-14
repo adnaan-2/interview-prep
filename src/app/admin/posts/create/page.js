@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { Upload, X, ArrowLeft, Loader, CheckCircle } from 'lucide-react'
 
 export default function AdminCreatePostPage() {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')

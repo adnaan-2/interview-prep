@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Eye, MessageCircle, TrendingUp, BarChart3 } from 'lucide-react'
 
 export default function AdminStatsPage() {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const router = useRouter()
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)

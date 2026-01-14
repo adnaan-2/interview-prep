@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { signIn, useSession } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 export default function AdminLoginPage() {
@@ -13,16 +12,17 @@ export default function AdminLoginPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { status, data: session } = useSession();
+  const { status } = useSession();
 
   // Check for signup success message
   useEffect(() => {
-    if (searchParams.get('signup') === 'success') {
+    if (typeof window === 'undefined') return;
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('signup') === 'success') {
       setSuccess('Account created successfully! Please sign in.');
     }
-  }, [searchParams]);
+  }, []);
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function AdminLoginPage() {
           Sign in to your account
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link href="/auth/signup" className="font-medium text-blue-600 hover:text-blue-500">
             Sign up
           </Link>
