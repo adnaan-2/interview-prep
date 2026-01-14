@@ -7,14 +7,9 @@ export default withAuth(
     const { token } = req.nextauth;
     
     console.log('🔒 Middleware check for path:', pathname);
-    console.log('🔑 User token:', token);
+    console.log('🔑 User authenticated:', !!token);
     
-    // Check if user is trying to access admin pages
-    if (pathname.startsWith('/admin') && token?.role !== 'admin') {
-      console.log('❌ Non-admin user tried to access admin area');
-      return NextResponse.redirect(new URL('/auth/login', req.url));
-    }
-    
+    // Allow all authenticated users to access admin pages
     return NextResponse.next();
   },
   {

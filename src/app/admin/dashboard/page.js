@@ -24,7 +24,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (status === 'unauthenticated' || (session && session.user?.role !== 'admin')) {
+    if (status === 'unauthenticated') {
       router.push('/auth/login')
       return
     }

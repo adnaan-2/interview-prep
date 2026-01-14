@@ -1,8 +1,9 @@
 'use client'
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
-import { Menu, X, ChevronDown, Search } from 'lucide-react'
+import { Menu, X, ChevronDown, Search, User, LogOut } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useSession, signOut } from 'next-auth/react'
 import Image from 'next/image'
 
 export default function Navbar() {
@@ -15,6 +16,7 @@ export default function Navbar() {
   const [showMobileSearch, setShowMobileSearch] = useState(false)
   const searchRef = useRef(null)
   const router = useRouter()
+  const { data: session, status } = useSession()
 
   // Close search results when clicking outside
   useEffect(() => {
@@ -263,20 +265,54 @@ export default function Navbar() {
           </button>
         </div>
         
-        {/* Desktop navbar */}
-        <div className="hidden md:flex justify-between items-center py-6">
-          <Link href="/" className="text-5xl font-extrabold tracking-tight">
+        {/* Desktop navbar - Single Line */}
+        <div className="hidden md:flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center shrink-0">
+            <span className="text-xl font-bold">
               <span className="text-white">Pakistan</span>
               <span className="text-blue-400">Info</span>
+            </span>
           </Link>
           
-          <div className="w-full max-w-md" ref={searchRef}>
+          {/* Navigation Links */}
+          <nav className="flex items-center space-x-4 ml-6">
+            <Link href="/" className="text-sm text-white hover:text-blue-400 transition-colors whitespace-nowrap">Home</Link>
+            <Link href="/category/business" className="text-sm text-white hover:text-blue-400 transition-colors whitespace-nowrap">Business</Link>
+            <Link href="/category/tech" className="text-sm text-white hover:text-blue-400 transition-colors whitespace-nowrap">Tech</Link>
+            <Link href="/category/weather" className="text-sm text-white hover:text-blue-400 transition-colors whitespace-nowrap">Weather</Link>
+            <Link href="/category/pakistan" className="text-sm text-white hover:text-blue-400 transition-colors whitespace-nowrap">Pakistan</Link>
+            
+            <div className="relative">
+              <button 
+                onClick={toggleLifestyleDropdown}
+                className="text-sm text-white hover:text-blue-400 transition-colors whitespace-nowrap flex items-center"
+                aria-expanded={lifestyleDropdownOpen}
+              >
+                Lifestyle <ChevronDown size={16} className="ml-1" />
+              </button>
+              
+              {lifestyleDropdownOpen && (
+                <div className="absolute top-full left-0 mt-2 bg-gray-800 py-2 w-48 shadow-xl rounded-md border border-gray-700 z-50">
+                  <Link href="/category/lifestyle/health" className="block px-4 py-2 hover:bg-gray-700 text-sm">Health</Link>
+                  <Link href="/category/lifestyle/sports" className="block px-4 py-2 hover:bg-gray-700 text-sm">Sports</Link>
+                  <Link href="/category/lifestyle/entertainment" className="block px-4 py-2 hover:bg-gray-700 text-sm">Entertainment</Link>
+                  <Link href="/category/lifestyle/education" className="block px-4 py-2 hover:bg-gray-700 text-sm">Education</Link>
+                  <Link href="/category/lifestyle/islam" className="block px-4 py-2 hover:bg-gray-700 text-sm">Religion</Link>
+                </div>
+              )}
+            </div>
+          </nav>
+          
+          {/* Search Bar */}
+          <div className="flex-1 max-w-sm mx-6" ref={searchRef}>
             <form onSubmit={handleSearch} className="w-full">
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Search articles..."
-                  className="w-full py-2 pl-4 pr-10 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
+                  placeholder="Search or jump to..."
+                  aria-label="Search articles"
+                  className="w-full py-1.5 pl-4 pr-10 rounded-md bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   value={searchQuery}
                   onChange={handleInputChange}
                   onFocus={() => {
@@ -288,8 +324,9 @@ export default function Navbar() {
                 <button 
                   type="submit"
                   className="absolute inset-y-0 right-0 px-3 flex items-center"
+                  aria-label="Submit search"
                 >
-                  <Search size={20} className="text-gray-400" />
+                  <Search size={16} className="text-gray-400" />
                 </button>
               </div>
 
@@ -360,39 +397,46 @@ export default function Navbar() {
               )}
             </form>
           </div>
-        </div>
-        
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex justify-center border-t border-gray-700 py-3">
-          <nav className="flex items-center space-x-8">
-            <Link href="/" className="py-3 px-2 hover:text-blue-400 transition-colors uppercase text-xl font-bold">Home</Link>
-            <Link href="/category/business" className="py-3 px-2 hover:text-blue-400 transition-colors uppercase text-lg font-bold">Business</Link>
-            <Link href="/category/tech" className="py-3 px-2 hover:text-blue-400 transition-colors uppercase text-lg font-bold">Tech</Link>
-            <Link href="/category/weather" className="py-3 px-2 hover:text-blue-400 transition-colors uppercase text-lg font-bold">Weather</Link>
-            <Link href="/category/automotive" className="py-3 px-2 hover:text-blue-400 transition-colors uppercase text-lg font-bold">Automotive</Link>
-            <Link href="/category/pakistan" className="py-3 px-2 hover:text-blue-400 transition-colors uppercase text-lg font-bold">Pakistan</Link>
-            <Link href="/category/global" className="py-3 px-2 hover:text-blue-400 transition-colors uppercase text-lg font-bold">Global</Link>
-
-            <div className="relative">
-              <button 
-                onClick={toggleLifestyleDropdown}
-                className="py-3 px-2 hover:text-blue-400 transition-colors uppercase text-lg font-bold flex items-center"
-                aria-expanded={lifestyleDropdownOpen}
-              >
-                Lifestyle <ChevronDown size={20} className="ml-1" />
-              </button>
-              
-              {lifestyleDropdownOpen && (
-                <div className="absolute top-full left-0 bg-gray-800 py-3 w-56 shadow-xl rounded-b-md border border-gray-700">
-                  <Link href="/category/lifestyle/health" className="block px-5 py-3 hover:bg-gray-700 text-base font-bold">Health</Link>
-                  <Link href="/category/lifestyle/sports" className="block px-5 py-3 hover:bg-gray-700 text-base font-bold">Sports</Link>
-                  <Link href="/category/lifestyle/entertainment" className="block px-5 py-3 hover:bg-gray-700 text-base font-bold">Entertainment</Link>
-                  <Link href="/category/lifestyle/education" className="block px-5 py-3 hover:bg-gray-700 text-base font-bold">Education</Link>
-                  <Link href="/category/lifestyle/islam" className="block px-5 py-3 hover:bg-gray-700 text-base font-bold">Religion</Link>
-                </div>
-              )}
-            </div>
-          </nav>
+          
+          {/* Auth Buttons */}
+          <div className="flex items-center gap-3 shrink-0">
+            {status === 'loading' ? (
+              <div className="w-20 h-8 bg-gray-700 animate-pulse rounded-md"></div>
+            ) : session ? (
+              <>
+                <Link
+                  href="/admin/dashboard"
+                  className="px-3 py-1.5 text-sm font-normal text-white hover:text-blue-400 whitespace-nowrap transition-colors flex items-center gap-2"
+                >
+                  <User className="w-4 h-4" />
+                  Dashboard
+                </Link>
+                <span className="text-white/70 text-sm">{session.user.name}</span>
+                <button
+                  onClick={() => signOut({ callbackUrl: '/' })}
+                  className="px-3 py-1.5 text-sm font-medium text-white rounded-md border border-gray-600 hover:border-blue-400 hover:bg-gray-800 whitespace-nowrap transition-all flex items-center gap-2"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/auth/login"
+                  className="px-3 py-1.5 text-sm font-normal text-white hover:text-blue-400 whitespace-nowrap transition-colors"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  className="px-3 py-1.5 text-sm font-medium text-white rounded-md border border-gray-600 hover:border-blue-400 hover:bg-gray-800 whitespace-nowrap transition-all"
+                >
+                  Sign up
+                </Link>
+              </>
+            )}
+          </div>
         </div>
         
         {/* Mobile Navigation Menu */}
@@ -508,6 +552,52 @@ export default function Navbar() {
                   </div>
                 )}
               </nav>
+              
+              {/* Mobile Auth Buttons */}
+              <div className="mt-6 pt-6 border-t border-gray-700">
+                {session ? (
+                  <div className="space-y-3">
+                    <Link
+                      href="/admin/dashboard"
+                      className="flex items-center gap-2 w-full py-3 px-4 bg-gray-800 hover:bg-gray-700 rounded-lg text-white text-base font-bold"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <User className="w-5 h-5" />
+                      Dashboard
+                    </Link>
+                    <div className="px-4 py-2 text-sm text-gray-400">
+                      {session.user.name}
+                    </div>
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        signOut({ callbackUrl: '/' });
+                      }}
+                      className="flex items-center gap-2 w-full py-3 px-4 border border-gray-600 hover:bg-gray-800 rounded-lg text-white text-base font-bold"
+                    >
+                      <LogOut className="w-5 h-5" />
+                      Sign out
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <Link
+                      href="/auth/login"
+                      className="block w-full py-3 px-4 text-center bg-gray-800 hover:bg-gray-700 rounded-lg text-white text-base font-bold"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Sign in
+                    </Link>
+                    <Link
+                      href="/auth/signup"
+                      className="block w-full py-3 px-4 text-center border border-blue-500 hover:bg-blue-500 rounded-lg text-white text-base font-bold"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Sign up
+                    </Link>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}

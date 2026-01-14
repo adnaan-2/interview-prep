@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "css": "npx tailwindcss -i src/styles/globals.css -o src/styles/output.css --watch",
-    "seed:admin": "ts-node --transpile-only src/scripts/seed-admin.ts"
+    "seed:admin": "ts-node --transpile-only src/scripts/seed-admin.ts",
+    "create:admin": "node scripts/create-admin.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 export default function AdminLoginPage() {
   const [formData, setFormData] = useState({
@@ -10,20 +11,25 @@ export default function AdminLoginPage() {
     password: ''
   });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { status, data: session } = useSession();
 
-  // Improved redirect logic
+  // Check for signup success message
+  useEffect(() => {
+    if (searchParams.get('signup') === 'success') {
+      setSuccess('Account created successfully! Please sign in.');
+    }
+  }, [searchParams]);
+
+  // Redirect if already authenticated
   useEffect(() => {
     if (status === 'authenticated') {
-      if (session?.user?.role === 'admin') {
-        router.push('/admin/dashboard');
-      } else {
-        setError('You do not have admin privileges');
-      }
+      window.location.replace('/admin/dashboard');
     }
-  }, [status, session, router]);
+  }, [status]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +43,7 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccess('');
 
     try {
       const result = await signIn('credentials', {
@@ -48,12 +55,13 @@ export default function AdminLoginPage() {
       if (result?.error) {
         setError(result.error === 'CredentialsSignin' ? 
           'Invalid email or password' : result.error);
+        setLoading(false);
       } else if (result?.ok) {
-        router.push('/admin/dashboard');
+        // Successful login - force redirect to dashboard
+        window.location.replace('/admin/dashboard');
       }
     } catch {
       setError('An unexpected error occurred');
-    } finally {
       setLoading(false);
     }
   };
@@ -62,8 +70,14 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Admin Login
+          Sign in to your account
         </h2>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Don't have an account?{' '}
+          <Link href="/auth/signup" className="font-medium text-blue-600 hover:text-blue-500">
+            Sign up
+          </Link>
+        </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -71,6 +85,12 @@ export default function AdminLoginPage() {
           {error && (
             <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
               <p className="text-sm text-red-700">{error}</p>
+            </div>
+          )}
+
+          {success && (
+            <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-4">
+              <p className="text-sm text-green-700">{success}</p>
             </div>
           )}
 
@@ -102,7 +122,7 @@ export default function AdminLoginPage() {
                   id="password"
                   name="password"
                   type="password"
-                  autoComplete="off"
+                  autoComplete="current-password"
                   required
                   value={formData.password}
                   onChange={handleChange}
@@ -115,7 +135,7 @@ export default function AdminLoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400 disabled:cursor-not-allowed"
               >
                 {loading ? 'Signing in...' : 'Sign in'}
               </button>
