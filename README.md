@@ -1,4 +1,4 @@
-# News and Blogging Site
+#Blogging Site
 Modern News Blog Platform built with Next.js 14, featuring real-time content management, Cloudinary image hosting, and comprehensive analytics.
 
 📋 Tech Stack
